@@ -67,15 +67,17 @@ func (s *TelegramService) ProcessUpdate(update *tgbotapi.Update) {
 		// Get the largest photo
 		photo := message.Photo[len(message.Photo)-1]
 
-		photoData, err := s.downloadPhoto(photo.FileID)
+		photoData, err := s.downloadFile(photo.FileID)
 		if err != nil {
 			log.Printf("Failed to download photo: %v", err)
 			s.sendErrorResponse(chatID, "Failed to download photo")
 			return
 		}
 
+		// Telegram photos are typically JPEG
 		caption := message.Caption
-		if err := s.githubService.SavePhoto(ctx, chatID, messageID, username, photoData, date, caption); err != nil {
+		fileExt := ".jpg"
+		if err := s.githubService.SavePhoto(ctx, chatID, messageID, username, photoData, date, caption, fileExt); err != nil {
 			log.Printf("Failed to save photo: %v", err)
 			s.sendErrorResponse(chatID, "Failed to save photo to GitHub")
 			return
@@ -93,18 +95,14 @@ func (s *TelegramService) ProcessUpdate(update *tgbotapi.Update) {
 		}
 
 		caption := message.Caption
-		if err := s.githubService.SavePhoto(ctx, chatID, messageID, username, photoData, date, caption); err != nil {
+		fileExt := getExtensionFromMimeType(message.Document.MimeType)
+		if err := s.githubService.SavePhoto(ctx, chatID, messageID, username, photoData, date, caption, fileExt); err != nil {
 			log.Printf("Failed to save document: %v", err)
 			s.sendErrorResponse(chatID, "Failed to save document to GitHub")
 			return
 		}
 		s.sendSuccessResponse(chatID, "Document saved to GitHub successfully!")
 	}
-}
-
-// downloadPhoto downloads a photo from Telegram
-func (s *TelegramService) downloadPhoto(fileID string) ([]byte, error) {
-	return s.downloadFile(fileID)
 }
 
 // downloadFile downloads a file from Telegram
@@ -167,4 +165,22 @@ func isImageMimeType(mimeType string) bool {
 		}
 	}
 	return false
+}
+
+// getExtensionFromMimeType returns the file extension for a given MIME type
+func getExtensionFromMimeType(mimeType string) string {
+	mimeToExt := map[string]string{
+		"image/jpeg": ".jpg",
+		"image/jpg":  ".jpg",
+		"image/png":  ".png",
+		"image/gif":  ".gif",
+		"image/webp": ".webp",
+		"image/bmp":  ".bmp",
+	}
+
+	if ext, ok := mimeToExt[mimeType]; ok {
+		return ext
+	}
+	// Default to .jpg if MIME type is unknown
+	return ".jpg"
 }

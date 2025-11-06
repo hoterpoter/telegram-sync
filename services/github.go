@@ -90,11 +90,11 @@ func (s *GitHubService) SaveMessage(ctx context.Context, chatID int64, messageID
 }
 
 // SavePhoto saves a photo to GitHub
-func (s *GitHubService) SavePhoto(ctx context.Context, chatID int64, messageID int, username string, photoData []byte, date time.Time, caption string) error {
+func (s *GitHubService) SavePhoto(ctx context.Context, chatID int64, messageID int, username string, photoData []byte, date time.Time, caption string, fileExt string) error {
 	// Create a structured path
 	dateStr := date.Format("2006-01-02")
 	dirPath := filepath.Join("photos", fmt.Sprintf("chat_%d", chatID), dateStr)
-	filename := fmt.Sprintf("photo_%d.jpg", messageID)
+	filename := fmt.Sprintf("photo_%d%s", messageID, fileExt)
 	fullPath := filepath.Join(dirPath, filename)
 
 	commitMsg := fmt.Sprintf("Add photo from %s at %s", username, date.Format(time.RFC3339))
