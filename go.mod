@@ -3,10 +3,14 @@ module github.com/hoterpoter/telegram-sync
 go 1.24.9
 
 require (
+	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1
+	github.com/gofiber/fiber/v2 v2.52.9
+	github.com/google/go-github/v57 v57.0.0
+	golang.org/x/oauth2 v0.32.0
+)
+
+require (
 	github.com/andybalholm/brotli v1.1.0 // indirect
-	github.com/go-telegram-bot-api/telegram-bot-api/v5 v5.5.1 // indirect
-	github.com/gofiber/fiber/v2 v2.52.9 // indirect
-	github.com/google/go-github/v57 v57.0.0 // indirect
 	github.com/google/go-querystring v1.1.0 // indirect
 	github.com/google/uuid v1.6.0 // indirect
 	github.com/klauspost/compress v1.17.9 // indirect
@@ -17,6 +21,5 @@ require (
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasthttp v1.51.0 // indirect
 	github.com/valyala/tcplisten v1.0.0 // indirect
-	golang.org/x/oauth2 v0.32.0 // indirect
 	golang.org/x/sys v0.28.0 // indirect
 )

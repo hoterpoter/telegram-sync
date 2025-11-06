@@ -53,6 +53,22 @@ PORT=3000
 
 ## Запуск
 
+### Использование Makefile (рекомендуется)
+
+```bash
+# Посмотреть все доступные команды
+make help
+
+# Собрать приложение
+make build
+
+# Запустить приложение
+make run
+
+# Форматировать и проверить код
+make lint
+```
+
 ### Локальная разработка
 
 ```bash
@@ -68,6 +84,30 @@ go run main.go
 ```bash
 go build -o telegram-sync
 ./telegram-sync
+```
+
+### Docker
+
+```bash
+# Сборка Docker образа
+docker build -t telegram-sync:latest .
+
+# Запуск с Docker Compose
+docker-compose up -d
+
+# Просмотр логов
+docker-compose logs -f
+
+# Остановка
+docker-compose down
+```
+
+Или с использованием Makefile:
+```bash
+make docker-build
+make docker-run
+make docker-logs
+make docker-stop
 ```
 
 ## Настройка Telegram Webhook

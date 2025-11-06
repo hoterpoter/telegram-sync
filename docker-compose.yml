@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  telegram-sync:
+    build: .
+    ports:
+      - "${PORT:-3000}:3000"
+    environment:
+      - TELEGRAM_BOT_TOKEN=${TELEGRAM_BOT_TOKEN}
+      - TELEGRAM_WEBHOOK_URL=${TELEGRAM_WEBHOOK_URL}
+      - GITHUB_TOKEN=${GITHUB_TOKEN}
+      - GITHUB_OWNER=${GITHUB_OWNER}
+      - GITHUB_REPO=${GITHUB_REPO}
+      - GITHUB_BRANCH=${GITHUB_BRANCH:-main}
+      - PORT=${PORT:-3000}
+      - DOWNLOAD_PATH=${DOWNLOAD_PATH:-./downloads}
+    restart: unless-stopped
+    volumes:
+      - downloads:/root/downloads
+    networks:
+      - telegram-sync-network
+
+volumes:
+  downloads:
+
+networks:
+  telegram-sync-network:
+    driver: bridge
